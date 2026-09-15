@@ -1,0 +1,113 @@
+
+!
+! Last configuration change at 14:15:52 UTC Tue Sep 15 2026
+!
+version 17.12
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname SW4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip audit notify log
+ip audit po max-events 100
+ip domain name manageme.org
+ip cef
+login on-success log
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+vtp version 1
+multilink bundle-name authenticated
+!
+crypto pki trustpoint TP-self-signed-67108928
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-67108928
+ revocation-check none
+ rsakeypair TP-self-signed-67108928
+ hash sha256
+!
+!
+crypto pki certificate chain TP-self-signed-67108928
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+!
+!
+memory free low-watermark processor 80589
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+enable secret 9 $9$tSOW1DWkEHrp5U$sDn9LzgP7vutO8iozc6XICVQu2qGLu9W4wkDF2htSiQ
+!
+username cisco password 7 045802150C2E0C
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+!
+interface Ethernet0/1
+ no shutdown
+!
+interface Ethernet0/2
+ no shutdown
+!
+interface Ethernet0/3
+ no shutdown
+!
+interface Vlan1
+ no shutdown
+ ip address 192.168.80.13 255.255.255.0
+!
+ip forward-protocol nd
+!
+!
+ip http server
+ip http secure-server
+ip ssh bulk-mode 131072
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+end

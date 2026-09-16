@@ -1,0 +1,22 @@
+# Ce fichier c'est celui de /etc/ansible/hosts
+[routeur]
+R1
+R2
+
+[switch]
+SW1
+SW2
+SW3
+SW4
+SW5
+SW6
+
+
+# configuration afin de permettre à ansible de pouvoir bien discuter avec des équipements
+
+[all:vars]
+ansible_connection=ansible.netcommon.network_cli
+ansible_network_os=cisco.ios.ios
+ansible_become=true
+ansible_become_method=enable
+ansible_become_password=cisco

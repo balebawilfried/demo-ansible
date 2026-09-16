@@ -1,0 +1,79 @@
+---
+
+  - name: Configuration du nom des hotes
+    ios_config:
+      lines: hostname {{ inventory_hostname }}
+
+  - name: configuration du nom de domaine
+    ios_system:  
+      domain_name: manageme.org
+
+  - name: configure DNS lookup sources
+    ios_system:
+      lookup_enabled: yes
+
+  - name: Configure banner
+    ios_banner:
+      banner: motd
+      text: "ACCESS NON AUTORISE !! Ce routeur est la propriete de MANAGEME"
+      state: present
+  
+  - name: Configure the login banner
+    ios_banner:
+      banner: login
+      text: |
+        Bannière du login
+        Veuillez vous authentifier
+        SVP
+      state: present
+
+  - name: Configurer les utilisateurs
+    ios_config:
+      lines: 
+      - username manageme password manageme
+
+  - name: mot de passe enbale
+    ios_config:
+      lines: 
+      - enable secret cisco
+
+  
+  - name: crypter les passwords
+    ios_config:
+      lines: 
+      - service password-encryption
+
+  - name: creer une clef ssh
+    ios_config:
+      lines: 
+      - crypto key generate rsa general-keys modulus 2048
+
+  - name: configurer ssh version 2
+    ios_config:
+      lines: 
+      - ip ssh version 2
+
+  - name: limiter les connexions ssh
+    ios_config:
+      lines: 
+      - ip ssh logging events
+      - ip ssh time-out 60
+      - ip ssh authentication-retries 3
+
+  - name: Configurer les ACLs
+    ios_config:
+      lines: 
+      - permit tcp 192.168.80.0 0.0.0.255 any log
+      parents: ip access-list extended VTY-ACL
+      match: strict
+      replace: block
+  
+  - name: reapplication de VTY-ACL sur les ligne 0 4
+    ios_config:
+      lines:
+      - access-class VTY-ACL in
+      parents: line vty 0 4
+
+  - name: Sauvegarde de la configuration
+    ios_config:
+      save_when: changed

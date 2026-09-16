@@ -1,0 +1,15 @@
+# Ce fichier c'est celui de /etc/hosts du système d'exploitation
+
+# il faudra rajouter les lignes ci-dessus pour configurer la résolution DNS
+
+# Résolution de noms pour les switchs
+192.168.80.10   SW1
+192.168.80.11   SW2
+192.168.80.12   SW3
+192.168.80.13   SW4
+192.168.80.14   SW5
+192.168.80.15   SW6
+
+# Résolution de noms pour les routeurs
+192.168.80.16   R1
+192.168.80.17   R2

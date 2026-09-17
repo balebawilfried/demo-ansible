@@ -1,0 +1,178 @@
+---
+  - name: Configuration du VLAN 10 et 20 sur les switchs
+    ios_vlans:
+      config:
+      - name: Vlan_10
+        vlan_id: 10
+        state: active
+        shutdown: disabled
+        
+      - name: Vlan_20
+        vlan_id: 20
+        state: active
+        shutdown: enabled
+
+      - name: Vlan_30
+        vlan_id: 30
+        state: active
+        shutdown: disabled
+      state: merged
+
+
+  - name: Configuration de l'encapsulation 802.1Q Ethernet9/0
+    cisco.ios.ios_config:
+      parents:
+        - interface Ethernet9/0
+      lines:
+        - switchport trunk encapsulation dot1q
+
+  - name: Configuration de l'encapsulation 802.1Q Ethernet9/1
+    cisco.ios.ios_config:
+      parents:
+        - interface Ethernet9/1
+      lines:
+        - switchport trunk encapsulation dot1q
+
+
+  - name: Affectation des vlans aux interfaces
+    ios_l2_interfaces:
+      config:
+      - name: Ethernet4/0
+        mode: access
+        access:
+          vlan: 10
+
+      - name: Ethernet4/1
+        mode: access
+        access:
+          vlan: 10
+
+      - name: Ethernet4/2
+        mode: access
+        access:
+          vlan: 10
+
+      - name: Ethernet4/3
+        mode: access
+        access:
+          vlan: 10
+
+      - name: Ethernet9/0
+        mode: trunk
+        trunk:
+          allowed_vlans: 10,20,30
+          #encapsulation: dot1q
+
+      - name: Ethernet9/1
+        mode: trunk
+        trunk:
+          allowed_vlans: 10,20,30
+          #encapsulation: dot1q
+
+      - name: Ethernet5/0-3
+        mode: access
+        access:
+          vlan: 20
+      
+      
+      - name: Ethernet6/0-3
+        mode: access
+        access:
+          vlan: 30   
+      state: merged  
+      
+  
+  - name: Configuration de  la default gateway sur les switchs
+    ios_config:
+      lines: ip default-gateway 192.168.80.4
+
+  - name: Configuration de la security des ports
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet4/0
+
+  - name: Configuration de la security du port Ethernet4/1
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet4/1
+
+  - name: Configuration de la security du port Ethernet4/2
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet4/2
+
+  - name: Configuration de la security du port Ethernet4/3
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet4/3
+
+
+  - name: Configuration de la security du port Ethernet5/0
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet5/0
+
+  - name: Configuration de la security du port Ethernet5/1
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet5/1
+
+  - name: Configuration de la security du port Ethernet5/2
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet5/2
+
+  - name: Configuration de la security du port Ethernet5/3
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet5/3             
+
+  - name: Configuration de la security du port Ethernet6/0
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet6/0
+
+  - name: Configuration de la security du port Ethernet6/1
+    ios_config:
+      lines:
+      - switchport port-security
+      - switchport port-security maximum 10
+      - switchport port-security mac-address sticky
+      - switchport port-security violation shutdown
+      parents: interface Ethernet6/1

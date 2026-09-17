@@ -1,0 +1,15 @@
+---
+  - name: Configuration de base des routeurs et switch cisco
+    hosts: all
+    gather_facts: false
+
+    pre_tasks:
+    - debug:
+        msg: "Debut de la configuration"
+
+    roles:
+      - conf_base
+
+    post_tasks:
+    - debug:
+        msg: "Equipements configurés"

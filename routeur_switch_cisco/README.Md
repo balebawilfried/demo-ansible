@@ -16,5 +16,9 @@
 ### II- PREREQUIS
 
 - Ansible ;
+<p align="left">
+  <img src="../routeur_switch_cisco/images/eveng.png" width="45%">
+</p>
+
 - Eveng ;
 - ansible-pylibssh 

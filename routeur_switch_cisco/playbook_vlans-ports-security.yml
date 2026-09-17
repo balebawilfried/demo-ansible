@@ -1,0 +1,15 @@
+---
+  - name: Configuration des vlans + sécurité des switch cisco
+    hosts: switch
+    gather_facts: false
+
+    pre_tasks:
+    - debug:
+        msg: "Debut de la configuration"
+
+    roles:
+      - vlans_ports_security
+
+    post_tasks:
+    - debug:
+        msg: "Equipements configurés"

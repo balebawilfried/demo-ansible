@@ -4,21 +4,15 @@
 **Objectif :** Ce projet a pour but d'automatiser les configurations sur des équipements réseau (switch et routeur cisco). 
 
 
-### I- PERIMETRE 
- 
 
-<p align="center">
-  <img src="./images/ansible.png" width="45%">
-  <img src="./images/grafana.png" width="45%">
-</p>
+### I- PREREQUIS
+Afin de reproductuire ce travail, il est important que vous ayez les éléments suivants sur votre os (Ubuntu Desktop/dans mon cas):
+- Eveng (Dans la mesure où vous voulez faire de la virtualisation mais vous pourez appliquer les même configuration sur vos équipements physique);
 
+- ansible-pylibssh 
 
-### II- PREREQUIS
+### III- CONFIGURATION
 
-- Ansible ;
 <p align="left">
   <img src="../routeur_switch_cisco/images/eveng.png" width="45%">
 </p>
-
-- Eveng ;
-- ansible-pylibssh 

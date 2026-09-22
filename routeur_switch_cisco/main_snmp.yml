@@ -1,0 +1,8 @@
+---
+  - name: Configuration de SNMP 
+    ios_config:
+      commands:
+        - snmp-server community ansible-manageme RO
+        - snmp-server community ansible-manageme RW
+
+        

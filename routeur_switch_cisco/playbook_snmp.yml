@@ -1,0 +1,15 @@
+---
+  - name: Configuration du SNMP sur mes équipements
+    hosts: S1:S2:S3:R1:R2
+    gather_facts: false
+
+    pre_tasks:
+    - debug:
+        msg: "Debut de la configuration"
+
+    roles:
+      - snmp
+
+    post_tasks:
+    - debug:
+        msg: "Equipements configurés"

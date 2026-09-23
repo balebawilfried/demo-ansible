@@ -8,16 +8,14 @@
         msg: "Debut de la configuration"
 
     tasks:
-    - name: Configuration du Backup
-      ios_config:
-        backup: yes
-      register: config_output
+    - name : copie de running config vers l'équipement
+      command: scp "backup/{{inventory_hostname}}_config.2021-11-18@20:04:42  scp@{{inventory_hostname}}:{{inventory_hostname}}.config
+      # "./backup/{{inventory_hostname}}.config"
 
-    - name: Suppression des lignes current configuration
-      lineinline:
-        path: "./backup/{{inventory_hostname}}.config"
-        regexp: 'Current configuration.*'
-        state: absent
+    - name : config replace
+      ios_commad:
+         commands:
+            - config replace flash:R1.config force
 
     post_tasks:
     - debug:

@@ -4,5 +4,13 @@
       commands:
         - snmp-server community ansible-manageme RO
         - snmp-server community ansible-manageme RW
+  
+  - name: Sauvegarde de la configuration
+    ios_config:
+      save_when: changed
+
+  - name: Sauvegarde de la configuration
+    ios_config:
+      save_when: changed
 
         

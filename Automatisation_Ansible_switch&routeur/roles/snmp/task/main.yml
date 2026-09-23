@@ -9,8 +9,9 @@
     ios_config:
       save_when: changed
 
-  - name: Sauvegarde de la configuration
+  - name: write memory
     ios_config:
-      save_when: changed
+      commands:
+        - do write memory
 
         

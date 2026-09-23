@@ -60,6 +60,12 @@
       - ip ssh time-out 60
       - ip ssh authentication-retries 3
 
+  # Le scp va nous aider plus tard lorsque nous voudrions pousser le backup sur nos équipements
+  - name: Configuration du scp 
+    ios_config:
+      lines:
+      - ip scp server enable 
+      
   - name: Configurer les ACLs
     ios_config:
       lines: 

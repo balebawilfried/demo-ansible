@@ -1,6 +1,6 @@
 ---
   - name: Configuration du SNMP sur mes équipements
-    hosts: S1:S2:S3:R1:R2
+    hosts: all
     gather_facts: false
 
     pre_tasks:

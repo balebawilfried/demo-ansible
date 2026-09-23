@@ -70,7 +70,7 @@ Pour nos équipements reseau, nous allons choisir la plage 192.168.80.10-192.168
   Switch(config-line)# login local
   Switch(config-line)# exit
 # -+ Création de l'utilisateur qui devra se connecter en SSH :
-  Switch(config)# username cisco password cisco 
+  Switch(config)# username cisco privilege 15 password cisco 
 # -+ Activation du chiffrement du mot de passe :
   Switch(config)# service password-encryption
 # -+ Configuration du mot de passe pour le mode privilégié :
@@ -96,6 +96,8 @@ ansible-playbook playbook_vlans-ports-security.yml -u cisco -k
 # Pour la configuration du snmp 
 ansible-playbook playbook_snmp.yml -u cisco -k
 
+# Pour  la réalisation du backup, nous allons exécuter le code ci-dessous. Nous allons voir un dossier appelé backup avec l'ensemble des fichiers backup de nos équipements. 
+ansible-playbook playbook_backup-config.yml -u cisco -k  
 ```
 
 REFERENCES : 

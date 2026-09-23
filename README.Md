@@ -94,10 +94,13 @@ ansible-playbook playbook_cfg-base.yml -u cisco -k  # Elle nous invitera par la 
 ansible-playbook playbook_vlans-ports-security.yml -u cisco -k
 
 # Pour la configuration du snmp 
-ansible-playbook playbook_snmp.yml -u cisco -k
+ansible-playbook playbook_snmp.yml -u cisco
 
 # Pour  la réalisation du backup, nous allons exécuter le code ci-dessous. Nous allons voir un dossier appelé backup avec l'ensemble des fichiers backup de nos équipements. 
-ansible-playbook playbook_backup-config.yml -u cisco -k  
+ansible-playbook playbook_backup-config.yml -u cisco 
+
+# Restauration du backup
+ansible-playbook playbook_restore-backup.yml -u cisco   
 ```
 
 REFERENCES : 

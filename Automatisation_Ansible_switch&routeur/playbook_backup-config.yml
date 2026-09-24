@@ -16,19 +16,18 @@
 
     # Nous pouvons aussi supprimer cette tâche et garder la première
     - name: Renommage du Backup
-      ios_config:
       copy:
         src: "{{config_output.backup_path}}"
         dest: "./backup/{{inventory_hostname}}.config"
 
     - name: Suppression des lignes qui ne sont pas des commandes
-      lineinline:
+      lineinfile:
         path: "./backup/{{inventory_hostname}}.config"
         regexp: 'Building configuration.*'
         state: absent
 
     - name: Suppression des lignes current configuration
-      lineinline:
+      lineinfile:
         path: "./backup/{{inventory_hostname}}.config"
         regexp: 'Current configuration.*'
         state: absent

@@ -94,17 +94,40 @@ ansible-playbook playbook_cfg-base.yml -u cisco -k  # Elle nous invitera par la 
 ansible-playbook playbook_vlans-ports-security.yml -u cisco -k
 
 # Pour la configuration du snmp 
-ansible-playbook playbook_snmp.yml -u cisco
+ansible-playbook playbook_snmp.yml -u cisco -k
 
 # Pour  la réalisation du backup, nous allons exécuter le code ci-dessous. Nous allons voir un dossier appelé backup avec l'ensemble des fichiers backup de nos équipements. 
-ansible-playbook playbook_backup-config.yml -u cisco 
+ansible-playbook playbook_backup-config.yml -u cisco -k 
 
 # Restauration du backup
-ansible-playbook playbook_restore-backup.yml -u cisco   
+ansible-playbook playbook_restore-backup.yml -u cisco -k 
+
+# Pour voir le fichier copié sur l'équipement, nous allons nous connecter à l'équipement et ensuite exécuter la commande suivante, depuis le mode enable.  
+dir
 ```
 
-REFERENCES : 
-- Module ansible pour ios_cisco : https://docs.ansible.com/projects/ansible/latest/collections/cisco/ios/index.html#plugins-in-cisco-ios
+**NB :** Afin d'éviter la modification des fingerprint, nous pouvons configurer ansible pour cette réinitialisation ne se fasse pas de la manière suivante. 
+```shell
+nano /etc/ansible/ansible.cfg 
+
+# A l"intérieur du fichier ansible.cfg, nous allons copier les deux lignes ci-dessous
+
+[defaults]
+host_key_checking = False
+
+# Si nous voulons qu'il nous demande ou pas le mot de passe pour le mode priviligié, nous pouvons ajouter aussi les lignes ci-dessous. 
+
+[privilege_escalation]
+become_ask_pass=true
+```
+
+
+
 
 
 ## III- ANSIBLE POUR LE 
+
+## IV- REFERENCES 
+- Module ansible pour ios_cisco : https://docs.ansible.com/projects/ansible/latest/collections/cisco/ios/index.html#plugins-in-cisco-ios
+- Mots Clés Ansible : https://docs.ansible.com/projects/ansible/latest/reference_appendices/playbooks_keywords.html
+- Modules Ansible pour système Linux : https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/index.html#plugins-in-ansible-builtin  

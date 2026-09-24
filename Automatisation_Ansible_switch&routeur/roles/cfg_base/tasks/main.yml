@@ -15,14 +15,14 @@
   - name: Configuration de la bannière
     ios_banner:
       banner: motd
-      text: "ACCESS NON AUTORISE !! Ce routeur est la propriete de MANAGEME"
+      text: "ACCESS AUTORISE !! Ce routeur est la propriete de MANAGEME, SI ERREUR DECONNECTEZ-VOUS"
       state: present
   
   - name: Configuration de la bannière du login
     ios_banner:
       banner: login
       text: |
-        Bannière du login
+        Banner of login
         Veuillez vous authentifier
         SVP
       state: present
@@ -30,7 +30,7 @@
   - name: Configurer les utilisateurs
     ios_config:
       lines: 
-      - username manageme password manageme
+      - username cisco privilege 15 password cisco
 
   - name: mot de passe enbale
     ios_config:
@@ -43,7 +43,7 @@
       lines: 
       - service password-encryption
 
-  - name: creer une clef ssh
+  - name: créer une clé ssh
     ios_config:
       lines: 
       - crypto key generate rsa general-keys modulus 2048

@@ -1,0 +1,22 @@
+---
+  - name: Restauration du Backup sur nos équipements 
+    hosts: all
+    gather_facts: false
+
+    pre_tasks:
+    - debug:
+        msg: "Debut de la configuration"
+
+    tasks:
+    - name : copie de running config vers l'équipement
+      command: scp backup/{{inventory_hostname}}.config  cisco@{{inventory_hostname}}:{{inventory_hostname}}.config
+
+    - name : Chargement du Backup
+      # remote_user: cisco
+      ios_command:
+        commands:
+          - configure replace flash:{{inventory_hostname}}.config force
+
+    post_tasks:
+    - debug:
+        msg: "Restauration Finie"

@@ -5,11 +5,16 @@ R2
 
 [switch]
 SW1
+# Une autre nomenclature peut être 
+# SW1 ansible_host=192.168.80.10
 SW2
 SW3
 SW4
 SW5
 SW6
+# utiliser un user par équipement nous pouvons utiliser
+#ansible_user=cisco
+
 
 
 # configuration afin de permettre à ansible de pouvoir bien discuter avec des équipements
@@ -19,4 +24,8 @@ ansible_connection=ansible.netcommon.network_cli
 ansible_network_os=cisco.ios.ios
 ansible_become=true
 ansible_become_method=enable
+ansible_user=cisco
 ansible_become_password=cisco
+# Afin d'utiliser le même login sur nos équipements nous pouvons faire
+#ansible_user=cisco
+#env=test

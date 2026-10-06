@@ -1,0 +1,14 @@
+---
+  - name: Activation du scp 
+    ios_command:
+      commands: 
+        - enable
+        - conf t
+        - ip scp server enable
+      
+  - name: Transfert des IoS sur les équipements  
+    ansible.netcommon.net_put:
+      src: ./images_ios/c2960-lanbasek9-mz.122-55.SE12.bin
+      dest: flash:/c2960-lanbasek9-mz.122-55.SE12.bin
+
+  

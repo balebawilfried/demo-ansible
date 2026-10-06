@@ -9,6 +9,7 @@
 Afin de reproductuire ce travail, il est important que vous ayez les éléments suivants sur votre os (Ubuntu Desktop/dans mon cas):
 - Eveng : ici nous allons ajouter des nodes pour la machine ubuntu (sur laquelle nous allons installer ansible et ansible-pylibssh), pour nos switchs (tous étant du même modèle) et pour nos routeurs (tous étant aussi du même modèle). 
 - Cloner ce dépot sur notre machine ubuntu. 
+- Installer scp sur notre serveur ansible (pip install scp) 
 
 **NB :** Dans un contexte réel, nous aurons juste de besoin d'une machine sur laquelle ansible est installé et des équipements physique au lieu d'utiliser *Eveng*.
 
@@ -69,7 +70,7 @@ Pour nos équipements reseau, nous allons choisir la plage 192.168.80.10-192.168
   Switch(config-line)# transport input ssh 
   Switch(config-line)# login local
   Switch(config-line)# exit
-# -+ Création de l'utilisateur qui devra se connecter en SSH :
+# -+ Création de l'utilisateur qui devra se connecter en SSH avec les maximum de privilèges :
   Switch(config)# username cisco privilege 15 password cisco 
 # -+ Activation du chiffrement du mot de passe :
   Switch(config)# service password-encryption
@@ -81,14 +82,21 @@ Une fois la configuration terminée sur l'ensemble de nos équipements, nous all
 
 **NB :** Les informations de connexions seront les mêmes sur tous nos équipements (mot de passe enable, username/password pour la connexion SSH).
 
-### B. Exécution des playbook
+### B. Exécution des playbooks
 La configuration primordiale étant exécutée, nous allons passer à quelque chose d'un peu plus costaud. 
 ```shell
 # Test de ping avec ansible sur l'ensemble de équipements réseau
 ansible all -m ping -u cisco -k
 
 # En étant dans le repertoire ./Automatisation_Ansible_switch&routeur , nous allons exécuter la commande suivante 
-ansible-playbook playbook_cfg-base.yml -u cisco -k  # Elle nous invitera par la suite à saisir le mot de passe **cisco** dans notre cas.
+ansible-playbook playbook_cfg-base.yml -u cisco -k   
+# Elle nous invitera par la suite à saisir le mot de passe **cisco** dans notre cas.
+
+# Nous pouvons aussi utiliser la commande
+ansible-playbook -i /etc/ansible/host.ini(ou yml) playbook_cfg-base.yml -u cisco -k  
+
+# ou /etc/ansible/host.ini(ou yml) est le chemin vers notre fichier d'inventaire, il n'est pas obligé d'être le fichier host par défaut. 
+
 
 # Pour la configuration des vlans
 ansible-playbook playbook_vlans-ports-security.yml -u cisco -k
@@ -100,13 +108,17 @@ ansible-playbook playbook_snmp.yml -u cisco -k
 ansible-playbook playbook_backup-config.yml -u cisco -k 
 
 # Restauration du backup
-ansible-playbook playbook_restore-backup.yml -u cisco -k 
+ansible-playbook playbook_restore-backup.yml -u cisco -k  
 
 # Pour voir le fichier copié sur l'équipement, nous allons nous connecter à l'équipement et ensuite exécuter la commande suivante, depuis le mode enable.  
+
+# Transfert de l'os vers l'équipemet.
+# Stocker votre image dans le dossier 
+ansible-playbook playbook_restore-backup.yml -u cisco -k 
 dir
 ```
 
-**NB :** Afin d'éviter la modification des fingerprint, nous pouvons configurer ansible pour cette réinitialisation ne se fasse pas de la manière suivante. 
+**NB :** Afin d'éviter la modification des fingerprint, nous pouvons configurer ansible pour que cette réinitialisation ne se fasse pas de la manière suivante. Mais dans mon cas, je ne l'ai pas configuré. 
 ```shell
 nano /etc/ansible/ansible.cfg 
 

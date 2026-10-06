@@ -1,0 +1,13 @@
+---
+  - name: Vérification de la version courante 
+    debug:
+      msg: 
+      - "La version courante est {{ansible_net_version}}"
+
+  - name: Verification de la mise à jour 
+    debug:
+      msg: 
+      - "Votre équipement {{inventory_hostname}} n'est pas à jour, veuillez le mettre à jour"
+    when: ansible_net_version != upgrade_ios_version
+
+  

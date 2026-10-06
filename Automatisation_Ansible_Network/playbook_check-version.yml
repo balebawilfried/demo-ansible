@@ -1,0 +1,17 @@
+---
+  - name: Vérification de la version de l'OS
+    hosts: all
+    gather_facts: yes
+    vars:
+      upgrade_ios_version: 12.2(55)SE12
+
+    pre_tasks:
+    - debug:
+        msg: "Debut de la vérification"
+
+    roles:
+      - check_version
+
+    post_tasks:
+    - debug:
+        msg: "Fin de la vérification"

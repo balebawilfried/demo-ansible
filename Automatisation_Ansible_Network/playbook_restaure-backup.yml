@@ -9,7 +9,7 @@
 
     tasks:
     - name : copie de running config vers l'équipement
-      command: scp backup/{{inventory_hostname}}.config  cisco@{{inventory_hostname}}:{{inventory_hostname}}.config
+      command: scp ./backup/{{inventory_hostname}}.config  cisco@{{inventory_hostname}}:{{inventory_hostname}}.config
 
     - name : Chargement du Backup
       # remote_user: cisco

@@ -112,8 +112,12 @@ ansible-playbook playbook_restore-backup.yml -u cisco -k
 
 # Pour voir le fichier copié sur l'équipement, nous allons nous connecter à l'équipement et ensuite exécuter la commande suivante, depuis le mode enable.  
 
-# Transfert de l'os vers l'équipemet.
-# Stocker votre image dans le dossier 
+# Installation d'un nouvel os vers l'équipemet. On devra toujours se rassurer que nous avons de l'espace libre sur notre équipement
+
+# on peut le vérifier avec en étant en mode enable
+dir flash:
+
+# Si nous avons suffisamment d'espace, nous pouvons lancer la commande suivante : 
 ansible-playbook playbook_restore-backup.yml -u cisco -k 
 dir
 ```
@@ -131,6 +135,10 @@ host_key_checking = False
 
 [privilege_escalation]
 become_ask_pass=true
+
+# Si nous voulons définir un temps d'attente souvent nécessaire lorsque que nous faisons un transfert de fichiers d'un os vers un équipement réseau.
+[persistant_connection]
+command_timeout = 600
 ```
 
 

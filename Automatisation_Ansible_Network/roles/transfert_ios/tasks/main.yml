@@ -8,7 +8,10 @@
       
   - name: Transfert des IoS sur les équipements  
     ansible.netcommon.net_put:
-      src: ./images_ios/c2960-lanbasek9-mz.122-55.SE12.bin
-      dest: flash:/c2960-lanbasek9-mz.122-55.SE12.bin
+      src: " ./images_ios/c2960-lanbasek9-mz.150-2.SE10a.bin"
+      dest: "flash:/c2960-lanbasek9-mz.150-2.SE10a.bin"
+    #vars:
+      #command_timeout: 600
+
 
   

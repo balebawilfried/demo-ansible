@@ -1,0 +1,17 @@
+---
+  - name: Changement du système sur lequel mon équipement démarre
+    ios_command:
+      commands: 
+        #- enable
+        - conf t 
+        - boot system flash:"{{version_150SE10a}}"
+        - do write
+
+  - name: Rechargement de l'équipement 
+    cli_command:
+      command: reload
+      prompt:
+        - confirm
+      answer:
+        - 'y'
+  

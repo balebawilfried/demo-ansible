@@ -1,0 +1,17 @@
+---
+  - name: Configuration d'un nouvel os sur mes equipements
+    hosts: all
+    gather_facts: false
+
+    pre_tasks:
+    - debug:
+        msg: "Debut de l'installation"
+
+    roles:
+      - backup
+      - transfert_ios
+      - change_boot_sequence
+
+    post_tasks:
+    - debug:
+        msg: "Fin de l'installation"

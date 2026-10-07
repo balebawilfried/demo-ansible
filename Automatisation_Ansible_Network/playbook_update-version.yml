@@ -1,0 +1,26 @@
+---
+  - name: Vérification de la version actuelle de l'OS
+    hosts: all
+    gather_facts: yes
+    vars:
+      upgrade_ios_version: "150-2.SE10a"
+
+    pre_tasks:
+    - debug:
+        msg: "Debut de la vérification"
+
+    tasks:
+      - name: version actuelle
+        debug:
+          msg:
+            - "La version actuelle est {{ansible_net_version}}"
+
+      - name: Comparaison de la version courrante avec celle mise à jour
+        assert: 
+          that: {"ansible_net_version == '{{upgrade_ios_version}}'"}
+          success_msg: "'{{ansible_net_version}}' a été installé avec brio sur votre équipement: {{inventory_hostname}}"
+          fail_msg: "La version'{{ansible_net_version}}' n'a pas été installé sur votre équipement: {{inventory_hostname}}"
+
+    post_tasks:
+    - debug:
+        msg: "Fin de la vérification"

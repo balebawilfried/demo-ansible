@@ -5,22 +5,23 @@
 
 
   pre_tasks:
-    - name: Set multiple lookup addresses on all visible adapters (usually physical adapters that are in the Up state), with debug logging to a file
+    - name:  Fixation de l'adresse IP du DNS
       ansible.windows.win_dns_client:
         adapter_names: '*'
         dns_servers:
-          - 192.168.34.5
-          - 192.168.34.6
-        suffix_search_list:
-          - "corp.contoso.com"
-          - "na.corp.contoso.com"
-        log_path: C:\dns_log.txt
+          - 192.168.80.18
+          - 192.168.152.129
+    
+    - name: Changement du hostname du serveur AD
+      ansible.windows.win_hostname:
+        name: dc0
+      register: res
 
-  tasks:
     - name: Redémarrer si c'est requis
       ansible.windows.win_reboot:
         when: res.reboot_required
 
+  tasks:
     - name: Installation de l'Active Directory (AD)
       ansible.windows.win_feature:
       name: AD-Domain-Services 

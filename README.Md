@@ -147,8 +147,26 @@ command_timeout = 600
 
 ## III- ANSIBLE POUR LES SERVEURS
 ### A. Ansible pour Windows Server 
+Avant de pour exécuter des playbook depuis notre serveur ansible pour notre serveur windows, il est important de configurer un certain nombre de chose pour que tout puisse bien se passer. Dans notre cas, nous avons utiliser **winrm** afin que notre serveur ansible puisse communiquer avec notre windows server 2019. Il vous suffit de vous rendre sur la documentation officiel d'ansible et vous trouverez le nécessaire pour effectuer ces configurations. Nous avons utilisé le script (N°5) et avons procédé de la manière suivante :
+- Copie du script sur ma vm windows server ; 
+- j'exécute la commande Set-ExecutionPolicy Unrestricted afin de pouvoir exécuter des scripts powershell
+- Installation de pywinrm(pip3 install pywinrm --break-system-packages) sur notre serveur ansible ;
+
+Une fois que nous avons terminé avec la configuration, nous pouvons donc tester nos playbook. Nous devrons être dans le repertoire  **Automatisation Ansible Windows Serve** avant d'éxécuter les commandes ci dessous. Dans le cas contraire, il faudra utiliser le chemin absolue pour pour le fichier **hostAD** et pour l'ensemble des playbook. 
+
+```shell
+# Test du ping sur notre serveur Active Directory
+ansible windows-server -i hostAD.ini -m win_ping
+```
+
+
+
+
 
 ## IV- REFERENCES 
-- Module ansible pour ios_cisco : https://docs.ansible.com/projects/ansible/latest/collections/cisco/ios/index.html#plugins-in-cisco-ios
-- Mots Clés Ansible : https://docs.ansible.com/projects/ansible/latest/reference_appendices/playbooks_keywords.html
-- Modules Ansible pour système Linux : https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/index.html#plugins-in-ansible-builtin  
+1. Module ansible pour ios_cisco : https://docs.ansible.com/projects/ansible/latest/collections/cisco/ios/index.html#plugins-in-cisco-ios
+2. Mots Clés Ansible : https://docs.ansible.com/projects/ansible/latest/reference_appendices/playbooks_keywords.html
+3. Modules Ansible pour système Linux : https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/index.html#plugins-in-ansible-builtin 
+4. Ansible & Windows : https://docs.ansible.com/projects/ansible/latest/os_guide/windows_usage.html, https://docs.ansible.com/projects/ansible/latest/os_guide/windows_winrm.html#windows-winrm 
+5. Script de la communauté ansible pour la configuration de winrm : https://github.com/ansible/ansible/blob/stable-2.9/examples/scripts/ConfigureRemotingForAnsible.ps1,  https://github.com/faezehghiasi/ansible-windows-playbooks 
+6. Modules Ansible pour système Windows : https://docs.ansible.com/projects/ansible/latest/collections/ansible/windows/index.html

@@ -1,0 +1,52 @@
+---
+- name: Installation d'un Domain Controller (DC)
+  hosts: windows-server
+  gather_facts: false
+
+
+  pre_tasks:
+    - name: Set multiple lookup addresses on all visible adapters (usually physical adapters that are in the Up state), with debug logging to a file
+      ansible.windows.win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+          - 192.168.34.5
+          - 192.168.34.6
+        suffix_search_list:
+          - "corp.contoso.com"
+          - "na.corp.contoso.com"
+        log_path: C:\dns_log.txt
+
+  tasks:
+    - name: Redémarrer si c'est requis
+      ansible.windows.win_reboot:
+        when: res.reboot_required
+
+    - name: Installation de l'Active Directory (AD)
+      ansible.windows.win_feature:
+      name: AD-Domain-Services 
+      state: present
+      include_sub_features: true
+      include_management_tools: true
+      register: win_feature
+
+    - name: Redémarrage si la fonctionnalité le requiert
+      ansible.windows.win_reboot:
+      when: win_feature.reboot_required 
+
+    - name: Create new Windows domain in a new forest with specific parameters and reboot in post task
+      microsoft.ad.domain:
+        create_dns_delegation: false
+        database_path: C:\Windows\NTDS
+        dns_domain_name: balebawilfried.lan
+        domain_mode: Win2012R2
+        domain_netbios_name: BALEBAWILFRIED
+        forest_mode: Win2012R2
+        safe_mode_password: password123!
+        sysvol_path: C:\Windows\SYSVOL
+      register: domain_install
+
+    - name: Redémarrer le serveur si l'installation le requiert
+      ansible.windows.win_reboot:
+      when: domain_install.reboot_required
+
+  

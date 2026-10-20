@@ -145,7 +145,8 @@ command_timeout = 600
 
 
 
-## III- ANSIBLE POUR LE 
+## III- ANSIBLE POUR LES SERVEURS
+### A. Ansible pour Windows Server 
 
 ## IV- REFERENCES 
 - Module ansible pour ios_cisco : https://docs.ansible.com/projects/ansible/latest/collections/cisco/ios/index.html#plugins-in-cisco-ios

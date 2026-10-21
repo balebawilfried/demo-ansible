@@ -9,7 +9,8 @@
 Afin de reproductuire ce travail, il est important que vous ayez les éléments suivants sur votre os (Ubuntu Desktop/dans mon cas):
 - Eveng : ici nous allons ajouter des nodes pour la machine ubuntu (sur laquelle nous allons installer ansible et ansible-pylibssh), pour nos switchs (tous étant du même modèle) et pour nos routeurs (tous étant aussi du même modèle). 
 - Cloner ce dépot sur notre machine ubuntu. 
-- Installer scp sur notre serveur ansible (pip install scp) 
+- Installer scp sur notre serveur ansible (pip install scp)
+- Installer les outils de ansible nécessaire à la communication avec windows (pip3 install pyopenssl, pip install requests, pip install pywinrm). En ajoutant l'option --break-system-packages  pour eviter de tomber sous le coup de création d'un environnement virtuel. 
 
 **NB :** Dans un contexte réel, nous aurons juste de besoin d'une machine sur laquelle ansible est installé et des équipements physique au lieu d'utiliser *Eveng*.
 
@@ -148,17 +149,32 @@ command_timeout = 600
 ## III- ANSIBLE POUR LES SERVEURS
 ### A. Ansible pour Windows Server 
 Avant de pour exécuter des playbook depuis notre serveur ansible pour notre serveur windows, il est important de configurer un certain nombre de chose pour que tout puisse bien se passer. Dans notre cas, nous avons utiliser **winrm** afin que notre serveur ansible puisse communiquer avec notre windows server 2019. Il vous suffit de vous rendre sur la documentation officiel d'ansible et vous trouverez le nécessaire pour effectuer ces configurations. Nous avons utilisé le script (N°5) et avons procédé de la manière suivante :
-- Copie du script sur ma vm windows server ; 
-- j'exécute la commande Set-ExecutionPolicy Unrestricted afin de pouvoir exécuter des scripts powershell
-- Installation de pywinrm(pip3 install pywinrm --break-system-packages) sur notre serveur ansible ;
-
-Une fois que nous avons terminé avec la configuration, nous pouvons donc tester nos playbook. Nous devrons être dans le repertoire  **Automatisation Ansible Windows Serve** avant d'éxécuter les commandes ci dessous. Dans le cas contraire, il faudra utiliser le chemin absolue pour pour le fichier **hostAD** et pour l'ensemble des playbook. 
-
+- Copie du script sur ma vm windows server, par exemple dans le dossier download ; 
+- Puis nous avons exécuté les commandes suivantes dans le powershell (ouvert en mode Administrateur) :
 ```shell
-# Test du ping sur notre serveur Active Directory
+# Fixation du chemin vers le script
 ansible windows-server -i hostAD.ini -m win_ping
+$file = "C:\Users\Administrator\Downloads\ConfigureRemotingForAnsible.ps1"
+
+# Exécution du script 
+powershell.exe -ExecutionPolicy Bypass -File $file -Verbose
 ```
 
+
+> **NB :**
+Une fois que nous avons terminé avec la configuration, nous pouvons donc tester nos playbook. Nous devrons être dans le repertoire  **Automatisation Ansible Windows Serveur** avant d'éxécuter les commandes ci dessous. Dans le cas contraire, il faudra utiliser le chemin absolue pour pour le fichier **hostAD** et pour l'ensemble des **playbook**. 
+
+Nous pouvons donc à présent configurer ma machine windows serveur, en exécutant au choix les commandes suivantes : 
+```shell
+# Test du ping sur notre serveur Active Directory
+ansible windows-server -i hostAD -m win_ping
+
+# Vérification de la syntaxe de notre playbook de création d'un controleur de domaine 
+ansible-playbook --syntax-check -i hostAD playbook_creation-DC.yml
+
+# Création de notre controlleur de domaine et du nécessaire
+ansible-playbook -i hostAD playbook_creation-DC.yml
+```
 
 
 

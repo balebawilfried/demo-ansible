@@ -3,15 +3,20 @@
   hosts: windows-server
   gather_facts: false
 
-
   pre_tasks:
+    - name: Création de l'utilisateur admin
+      ansible.windows.win_user:
+        name: admin
+        password: P@Zerty&123-
+        state: present
+
     - name:  Fixation de l'adresse IP du DNS
       ansible.windows.win_dns_client:
         adapter_names: '*'
         dns_servers:
           - 192.168.80.18
           - 192.168.152.129
-    
+
     - name: Changement du hostname du serveur AD
       ansible.windows.win_hostname:
         name: dc0
@@ -22,17 +27,29 @@
         when: res.reboot_required
 
   tasks:
-    - name: Installation de l'Active Directory (AD)
-      ansible.windows.win_feature:
-      name: AD-Domain-Services 
-      state: present
-      include_sub_features: true
-      include_management_tools: true
-      register: win_feature
+    #- name: Installation de l'Active Directory (AD)
+      #ansible.windows.win_feature:
+        #name: AD-Domain-Services 
+        #state: present
+        #include_sub_features: true
+        #include_management_tools: true
+      #register: win_feature_ad
 
-    - name: Redémarrage si la fonctionnalité le requiert
+    #- name: Redémarrage si la fonctionnalité AD le requiert
+      #ansible.windows.win_reboot:
+      #when: win_feature_ad.reboot_required
+
+    - name: Installation du DNS 
+      ansible.windows.win_feature:
+        name: DNS 
+        state: present
+        include_sub_features: true
+        include_management_tools: true
+      register: win_feature_dns
+
+    - name: Redémarrage si la fonctionnalité AD le requiert
       ansible.windows.win_reboot:
-      when: win_feature.reboot_required 
+      when: win_feature_dns.reboot_required
 
     - name: Create new Windows domain in a new forest with specific parameters and reboot in post task
       microsoft.ad.domain:
@@ -49,5 +66,3 @@
     - name: Redémarrer le serveur si l'installation le requiert
       ansible.windows.win_reboot:
       when: domain_install.reboot_required
-
-  

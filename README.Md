@@ -147,8 +147,8 @@ command_timeout = 600
 
 
 ## III- ANSIBLE POUR LES SERVEURS
-### A. Ansible pour Windows Server 
-Avant de pour exécuter des playbook depuis notre serveur ansible pour notre serveur windows, il est important de configurer un certain nombre de chose pour que tout puisse bien se passer. Dans notre cas, nous avons utiliser **winrm** afin que notre serveur ansible puisse communiquer avec notre windows server 2019. Il vous suffit de vous rendre sur la documentation officiel d'ansible et vous trouverez le nécessaire pour effectuer ces configurations. Nous avons utilisé le script (N°5) et avons procédé de la manière suivante :
+### A. Ansible pour Windows  
+Avant de pour exécuter des playbook depuis notre serveur ansible pour notre serveur windows, il est important de configurer un certain nombre de chose pour que tout puisse bien se passer. Cette configuration doit être faite à la fois sur nos serveur windows (Windows Server 2012, 2016, 2019, etc) et nos clients windows (Windows 10, 11, etc) Dans notre cas, nous avons utiliser **winrm** afin que notre serveur ansible puisse communiquer avec notre windows server 2019. Il vous suffit de vous rendre sur la documentation officiel d'ansible et vous trouverez le nécessaire pour effectuer ces configurations. Nous avons utilisé le script (N°5) et avons procédé de la manière suivante :
 - Copie du script sur ma vm windows server, par exemple dans le dossier download ; 
 - Puis nous avons exécuté les commandes suivantes dans le powershell (ouvert en mode Administrateur) :
 ```shell
@@ -174,6 +174,9 @@ ansible-playbook --syntax-check -i hostAD playbook_creation-DC.yml
 
 # Création de notre controlleur de domaine et du nécessaire
 ansible-playbook -i hostAD playbook_creation-DC.yml
+
+# Ajouter des clients au domaine
+ansible-playbook -i hostAD playbook_add-clientfordomain.yml
 ```
 
 

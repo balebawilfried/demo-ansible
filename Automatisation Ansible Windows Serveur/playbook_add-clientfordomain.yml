@@ -1,0 +1,64 @@
+---
+- name: Ajout des clients à un domain
+  hosts: windowsclients
+  gather_facts: false
+
+  pre_tasks:
+    #- name: Installation des mises à jour
+      #ansible.windows.win_updates:
+        #reboot: no
+      #register: upd_res 
+
+    #- name: Redémarrer après la mise à jour si c'est requis
+      #ansible.windows.win_reboot:
+        #msg: "Le serveur a redémarré ..."
+      #when: upd_res.reboot_required
+
+    #- name: Mise à jour du serveur
+      #ansible.windows.win_updates:
+        #category_names:
+          #- Application
+          #- CriticalUpdates
+          #- DefinitionUpdates
+          #- SecurityUpdates
+          #- Updates
+        #whilelist:
+          #- KB4093120
+        #reboot: no
+      #register: update_server_res 
+
+    
+  tasks:
+    - name:  Fixation de l'adresse IP du DNS
+      ansible.windows.win_dns_client:
+        adapter_names: '*'
+        dns_servers:
+          - 192.168.80.18
+          - 192.168.152.129
+
+    - name: Changement du hostname du client
+      ansible.windows.win_hostname:
+        name: "{{ inventory_hostname }}"
+      register: res
+
+    - name: Redémarrer si le changement de nom du client l'exige
+      ansible.windows.win_reboot:
+        msg: "Le serveur a redémarré ..."
+      when: res.reboot_required
+
+    - name: Promouvoir ce client comme membre du domaine 
+      microsoft.ad.membership:
+        dns_domain_name: balebawilfried.lan
+        #hostname: mydomainclient
+        domain_admin_user: Administrator@balebawilfried.lan
+        domain_admin_password: "@Dmin1strat0r#&123"
+        state: domain
+      register: add_client_domain
+
+    - name: Redémarrer si l'ajout l'exige c'est requis
+      ansible.windows.win_reboot:
+        msg: "Le serveur a redémarré ..."
+      when: add_client_domain.reboot_required 
+      
+
+  

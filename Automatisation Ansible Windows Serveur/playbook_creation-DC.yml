@@ -4,11 +4,19 @@
   gather_facts: false
 
   pre_tasks:
-    - name: Création de l'utilisateur admin
+    - name: Exiger un mot de passe pour le compte Administrateur local
+      ansible.windows.win_command: net user Administrator /passwordreq:yes
+      changed_when: false
+
+    - name: Définir le mot de passe de l’administrateur local
       ansible.windows.win_user:
-        name: admin
-        password: P@Zerty&123-
+        name: Administrator
+        password: "@Dmin1strat0r#&123"
+        # En situation réelle nous allons création cette variable dans ansible vault
+        #password: "{{ local_admin_password }}"
+        update_password: always
         state: present
+      no_log: true
 
     - name:  Fixation de l'adresse IP du DNS
       ansible.windows.win_dns_client:
@@ -24,6 +32,7 @@
 
     - name: Redémarrer si c'est requis
       ansible.windows.win_reboot:
+        msg: "Le serveur a redémarré ..."
       when: res.reboot_required
 
   tasks:
@@ -37,6 +46,7 @@
 
     - name: Redémarrage si la fonctionnalité AD le requiert
       ansible.windows.win_reboot:
+        msg: "Le serveur a redémarré ..."
       when: win_feature_ad.reboot_required
 
     - name: Installation du DNS 
@@ -49,6 +59,7 @@
 
     - name: Redémarrage si la fonctionnalité DNS le requiert
       ansible.windows.win_reboot:
+        msg: "Le serveur a redémarré ..."
       when: win_feature_dns.reboot_required
 
     - name: Creation d'un nouveau domaine et une forêt 
@@ -67,3 +78,15 @@
       ansible.windows.win_reboot:
         msg: "Le serveur a redémarré ..."
       when: domain_install.reboot_required
+
+    #- name: Création de l'utilisateur admin
+      #microsoft.ad.user:
+        #identity: Administrator
+        #firstname: Administrator
+        #surname: Balebawilfried
+        #company: Balebawilfried
+        #password: "@Dmin1strat0r#&123"
+        #state: present
+        #groups:
+          #set:
+            #- Domain Admins

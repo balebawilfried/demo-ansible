@@ -1,6 +1,6 @@
 ---
 - name: Installation d'un Domain Controller (DC)
-  hosts: windows-server
+  hosts: windowsserver
   gather_facts: false
 
   pre_tasks:
@@ -24,20 +24,20 @@
 
     - name: Redémarrer si c'est requis
       ansible.windows.win_reboot:
-        when: res.reboot_required
+      when: res.reboot_required
 
   tasks:
-    #- name: Installation de l'Active Directory (AD)
-      #ansible.windows.win_feature:
-        #name: AD-Domain-Services 
-        #state: present
-        #include_sub_features: true
-        #include_management_tools: true
-      #register: win_feature_ad
+    - name: Installation de l'Active Directory (AD)
+      ansible.windows.win_feature:
+        name: AD-Domain-Services 
+        state: present
+        include_sub_features: true
+        include_management_tools: true
+      register: win_feature_ad
 
-    #- name: Redémarrage si la fonctionnalité AD le requiert
-      #ansible.windows.win_reboot:
-      #when: win_feature_ad.reboot_required
+    - name: Redémarrage si la fonctionnalité AD le requiert
+      ansible.windows.win_reboot:
+      when: win_feature_ad.reboot_required
 
     - name: Installation du DNS 
       ansible.windows.win_feature:
@@ -47,11 +47,11 @@
         include_management_tools: true
       register: win_feature_dns
 
-    - name: Redémarrage si la fonctionnalité AD le requiert
+    - name: Redémarrage si la fonctionnalité DNS le requiert
       ansible.windows.win_reboot:
       when: win_feature_dns.reboot_required
 
-    - name: Create new Windows domain in a new forest with specific parameters and reboot in post task
+    - name: Creation d'un nouveau domaine et une forêt 
       microsoft.ad.domain:
         create_dns_delegation: false
         database_path: C:\Windows\NTDS
@@ -63,6 +63,7 @@
         sysvol_path: C:\Windows\SYSVOL
       register: domain_install
 
-    - name: Redémarrer le serveur si l'installation le requiert
+    - name: Redémarrer le serveur si la création du nouveau domaine et de la forêt le requiert
       ansible.windows.win_reboot:
+        msg: "Le serveur a redémarré ..."
       when: domain_install.reboot_required

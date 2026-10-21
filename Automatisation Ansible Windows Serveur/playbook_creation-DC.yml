@@ -18,6 +18,9 @@
         state: present
       no_log: true
 
+    - name: Installation des mises à jour
+      ansible. 
+
     - name:  Fixation de l'adresse IP du DNS
       ansible.windows.win_dns_client:
         adapter_names: '*'

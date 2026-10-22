@@ -27,24 +27,24 @@
         #reboot: no
       #register: update_server_res 
 
-    - name: Redémarrer après la mise à jour du serveur si c'est requis
-      ansible.windows.win_reboot:
-        msg: "Le serveur a redémarré ..."
-      when: update_server_res.reboot_required  
+    #- name: Redémarrer après la mise à jour du serveur si c'est requis
+      #ansible.windows.win_reboot:
+        #msg: "Le serveur a redémarré ..."
+      #when: update_server_res.reboot_required  
 
-    - name: Exiger un mot de passe pour le compte Administrateur local
-      ansible.windows.win_command: net user Administrator /passwordreq:yes
-      changed_when: false
+    #- name: Exiger un mot de passe pour le compte Administrateur local
+      #ansible.windows.win_command: net user Administrator /passwordreq:yes
+      #changed_when: false
 
-    - name: Définir le mot de passe de l’administrateur local
-      ansible.windows.win_user:
-        name: Administrator
-        password: "@Dmin1strat0r#&123"
+    #- name: Définir le mot de passe de l’administrateur local
+      #ansible.windows.win_user:
+        #name: Administrator
+        #password: @Dmin1strat0r#&123
         # En situation réelle nous allons création cette variable dans ansible vault
         #password: "{{ local_admin_password }}"
-        update_password: always
-        state: present
-      no_log: true
+        #update_password: always
+        #state: present
+      #no_log: true
 
     - name:  Fixation de l'adresse IP du DNS
       ansible.windows.win_dns_client:
@@ -90,7 +90,7 @@
         msg: "Le serveur a redémarré ..."
       when: win_feature_dns.reboot_required
 
-    - name: Creation d'un nouveau domaine et une forêt 
+    - name: Creation d'un nouveau domaine et une forêt
       microsoft.ad.domain:
         create_dns_delegation: false
         database_path: C:\Windows\NTDS
@@ -107,13 +107,13 @@
         msg: "Le serveur a redémarré ..."
       when: domain_install.reboot_required
 
-    - name: Création d'un user
-      ansible.windows.win_user:
-        name: bob
-        password: B0bP4ssw0rd
-        state: present
-        groups:
-          - Users
+    #- name: Création d'un user
+      #ansible.windows.win_user:
+        #name: bob
+        #password: B0bP4ssw0rd
+        #state: present
+        #groups:
+          #- Users
 
     #- name: Création de l'utilisateur pour le serveur AD
       #microsoft.ad.user:
@@ -130,5 +130,3 @@
   post_tasks:
   roles:
     - create_UO
-
-  

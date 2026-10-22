@@ -1,5 +1,5 @@
 ---
-- name: Ajout des clients à un domain
+- name: Ajout des clients à un domaine
   hosts: windowsclients
   gather_facts: false
 
@@ -27,7 +27,6 @@
         #reboot: no
       #register: update_server_res 
 
-    
   tasks:
     - name:  Fixation de l'adresse IP du DNS
       ansible.windows.win_dns_client:
@@ -58,7 +57,4 @@
     - name: Redémarrer si l'ajout l'exige c'est requis
       ansible.windows.win_reboot:
         msg: "Le serveur a redémarré ..."
-      when: add_client_domain.reboot_required 
-      
-
-  
+      when: add_client_domain.reboot_required

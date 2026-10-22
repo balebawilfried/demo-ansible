@@ -7,21 +7,22 @@
       - INFORMATIQUE
       - DEP_INFO
       - COMMERCIAL
-  
+
   - name: Création d'un nouveau groupe nommé informatique
     microsoft.ad.group:
       name: informatique
       description: Deploiement du groupe informatique
+      scope: global
+      category: security
+      path: "OU=INFORMATIQUE,DC=balebawilfried,DC=lan"
       state: present
 
+  # Get-ADDomain | Select-Object DNSRoot, DistinguishedName
   - name: Création d'un nouveau groupe nommé dep_info
     microsoft.ad.group:
       name: dep_info
       description: Deploiement du groupe dep_info
+      scope: global
+      category: security
+      path: "OU=DEP_INFO,DC=balebawilfried,DC=lan"
       state: present
-    
-
- 
-
-
-  

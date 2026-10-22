@@ -1,0 +1,27 @@
+---
+- name: Création d'utilisateur Active Directory
+  hosts: windowsserver
+  gather_facts: false
+
+  #tasks:
+    #- name: Execution d'un script powershell pour la création d'utilisateur
+      #ansible.windows.win_shell: C:\Users\Administrator\Downloads\script_ad_users.ps1
+
+  tasks:
+    - name: Vérifier la présence du script
+      ansible.windows.win_stat:
+        path: 'C:\Users\Administrator\Downloads\script_ad_users.ps1'
+      register: ad_script
+
+    - name: Exécuter le script PowerShell
+      ansible.windows.win_command:
+        argv:
+          - powershell.exe
+          - -NoProfile
+          - -NonInteractive
+          - -ExecutionPolicy
+          - Bypass
+          - -File
+          - 'C:\Users\Administrator\Downloads\script_ad_users.ps1'
+      when: ad_script.stat.exists
+      register: ad_user_creation

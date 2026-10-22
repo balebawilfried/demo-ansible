@@ -1,0 +1,4 @@
+FirstName;Lastname;Username;OU;Password;Initials;Email;Country;Departement;City;Telephone;StreetAddress;ZipCode;State;JobTitle;Company
+Julian;Assange;julian-assange;"OU=INFORMATIQUE,DC=balebawilfried,DC=lan";WiKiLeAk$;JA
+Anthony;Mairien;it-anthony;"OU=DEP_INFO,DC=balebawilfried,DC=lan";P@$$w0RD;AM
+John;Appleseed;john-appleseed;"OU=COMMERCIAL,DC=balebawilfried,DC=lan";ApPl€;JAP

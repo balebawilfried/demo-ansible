@@ -153,7 +153,6 @@ Avant de pour exécuter des playbook depuis notre serveur ansible pour notre ser
 - Puis nous avons exécuté les commandes suivantes dans le powershell (ouvert en mode Administrateur) :
 ```shell
 # Fixation du chemin vers le script
-ansible windows-server -i hostAD.ini -m win_ping
 $file = "C:\Users\Administrator\Downloads\ConfigureRemotingForAnsible.ps1"
 
 # Exécution du script 
@@ -164,7 +163,7 @@ powershell.exe -ExecutionPolicy Bypass -File $file -Verbose
 > **NB :**
 Une fois que nous avons terminé avec la configuration, nous pouvons donc tester nos playbook. Nous devrons être dans le repertoire  **Automatisation Ansible Windows Serveur** avant d'éxécuter les commandes ci dessous. Dans le cas contraire, il faudra utiliser le chemin absolue pour pour le fichier **hostAD** et pour l'ensemble des **playbook**. 
 
-Nous pouvons donc à présent configurer ma machine windows serveur, en exécutant au choix les commandes suivantes : 
+Nous pouvons donc à présent configurer notre machine windows serveur, en exécutant au choix les commandes suivantes : 
 ```shell
 # Test du ping sur notre serveur Active Directory
 ansible windows-server -i hostAD -m win_ping
@@ -175,8 +174,24 @@ ansible-playbook --syntax-check -i hostAD playbook_creation-DC.yml
 # Création de notre controlleur de domaine et du nécessaire
 ansible-playbook -i hostAD playbook_creation-DC.yml
 
-# Ajouter des clients au domaine
+# Au moment de la création du domaine, si nous rencontrons des problèmes du mot de passe de l'administrateur locol. il faudra le fixer avec les commandes suivantes :
+net user Administrator * # Par la suite on demandera de fixer le mot de passe administrateur
+net user Administrator /passwordreq:yes
+
+# Vérification de la syntaxe de notre playbook d'ajout de machine dans un domaine
+ansible-playbook --syntax-check -i hostAD playbook_add-clientfordomain.yml
+
+# Ajout des pc clients au domaine
 ansible-playbook -i hostAD playbook_add-clientfordomain.yml
+
+# Vérification de la syntaxe de notre fichier ansible sur windows server
+Import-Csv C:\Users\Administrator\Downloads\usersdatabase.csv -Delimiter ";" | Format-Table
+
+# Vérification de la syntaxe de notre playbook de création d'utilisateur
+ansible-playbook --syntax-check -i hostAD playbook_creation-user.yml
+
+# Création d'utilisateur. Mais avant il est important de mettre les fichiers (script_ad_users.ps1, usersdatabase.csv) dans notre repertoire C:\Users\Administrator\Downloads\ sur notre server AD
+ansible-playbook -i hostAD playbook_creation-user.yml
 ```
 
 
